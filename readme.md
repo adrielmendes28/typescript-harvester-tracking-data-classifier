@@ -16,6 +16,8 @@ O projeto é composto pelos seguintes serviços:
 `ManeuveringService`: Verifica se o equipamento está realizando manobras.  
 `EquipmentDataService`: Obtém pontos de dados próximos ao ponto de referência.  
 `PairedEquipmentService`: Encontra equipamentos pareados com base no ID do equipamento, timestamp e dados de todos os equipamentos.  
+
+Também temos os seguintes repositorys:
 `DataRepository`: Carrega os dados dos equipamentos e os organiza em um formato adequado para análise.  
 
 ## Execução
