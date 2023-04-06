@@ -1,7 +1,7 @@
 # Projeto de Análise de Status de Equipamentos
 Este projeto é responsável por analisar o status de diversos equipamentos e identificar se eles estão em movimento, parados, realizando manobras ou em colheita, com base em dados de GPS, velocidade e direção. Além disso, o projeto também verifica se há equipamentos pareados, ou seja, trabalhando juntos.
 
-``Instalação``
+## Instalação
 Para instalar as dependências do projeto, execute:
 
 ```
