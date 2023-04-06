@@ -11,12 +11,12 @@ yarn install
 ## Funcionalidades
 O projeto é composto pelos seguintes serviços:
 
-`StatusService`: Responsável pela análise do status dos equipamentos.
-`MotionService`: Verifica se o equipamento está em movimento ou parado.
-`ManeuveringService`: Verifica se o equipamento está realizando manobras.
-`EquipmentDataService`: Obtém pontos de dados próximos ao ponto de referência.
-`PairedEquipmentService`: Encontra equipamentos pareados com base no ID do equipamento, timestamp e dados de todos os equipamentos.
-`DataRepository`: Carrega os dados dos equipamentos e os organiza em um formato adequado para análise.
+`StatusService`: Responsável pela análise do status dos equipamentos.  
+`MotionService`: Verifica se o equipamento está em movimento ou parado.  
+`ManeuveringService`: Verifica se o equipamento está realizando manobras.  
+`EquipmentDataService`: Obtém pontos de dados próximos ao ponto de referência.  
+`PairedEquipmentService`: Encontra equipamentos pareados com base no ID do equipamento, timestamp e dados de todos os equipamentos.  
+`DataRepository`: Carrega os dados dos equipamentos e os organiza em um formato adequado para análise.  
 
 ## Execução
 Para executar o projeto, siga os seguintes passos:
