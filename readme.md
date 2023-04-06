@@ -4,7 +4,9 @@ Este projeto é responsável por analisar o status de diversos equipamentos e id
 ``Instalação``
 Para instalar as dependências do projeto, execute:
 
-```yarn install```
+```
+yarn install
+```
 
 ``Funcionalidades``
 O projeto é composto pelos seguintes serviços:
@@ -20,13 +22,17 @@ O projeto é composto pelos seguintes serviços:
 Para executar o projeto, siga os seguintes passos:
 
 Compile o projeto:
-```yarn build```
+```
+yarn build
+```
 
 Carregue os dados dos equipamentos no arquivo dist/static/data.json.
 
 Execute o script principal do projeto:
 
-```yarn start```
+```
+yarn start
+```
 
 Após a execução, os resultados da análise serão exibidos no console e também serão salvos no arquivo output/data.json.
 
