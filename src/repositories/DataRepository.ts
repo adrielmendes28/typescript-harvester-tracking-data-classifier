@@ -107,7 +107,6 @@ class DataRepository {
     fs.writeFileSync(this.OUTPUT_DIR + '/data.json', jsonData);
   }
 
-
   /**
    * Escreve os dados em um arquivo no formato CSV a partir de um array de objetos JSON.
    * @param {Array<Object>} data Array de objetos JSON a serem escritos no arquivo CSV.

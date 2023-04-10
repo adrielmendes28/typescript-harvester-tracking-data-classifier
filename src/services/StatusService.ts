@@ -275,7 +275,6 @@ class StatusService {
 
     console.log(`Worker ${workerId} Progresso: ${processedPoints}/${totalPoints} (${((processedPoints / totalPoints) * 100).toFixed(2)}%) Progresso Global: ${globalProgressPercentage}% Status: ${equipmentStatus.id} ${equipmentStatus.status} ${equipmentStatus.paired ? `(pareado com ${equipmentStatus.paired})` : ''} em ${tst} speed ${speed}`);
   }
-
 }
 
 export default new StatusService();

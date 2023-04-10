@@ -36,7 +36,5 @@ class MotionService {
         }
         return false;
     }
-
-
 }
 export default new MotionService();
