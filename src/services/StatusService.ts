@@ -12,6 +12,7 @@ import path from 'path';
 
 class StatusService {
   private readonly NEAR_OFFSET = 1; // Ajusta o offset utilizado nos cálculos da linha de máquina em movimento/parada ou manobrando
+  private readonly STATUS_WORKER_PATH = path.resolve(__dirname, '../workers/StatusWorker.js');
   private workerProgress: { [workerId: number]: { processedPoints: number, totalPoints: number } } = {};
 
   /**
@@ -129,16 +130,27 @@ class StatusService {
    * @param {string} status O status atual do equipamento.
    * @returns {EquipmentStatus} Retorna o status atualizado do equipamento, incluindo informações sobre o equipamento pareado.
    */
-  private updateStatusWithPairedEquipment(point: DataPoint, pairedEquipment: DataPoint, status: EquipmentStatusEnum): EquipmentStatus {
+   private updateStatusWithPairedEquipment(point: DataPoint, pairedEquipment: DataPoint, status: EquipmentStatusEnum): EquipmentStatus {
     const harvestTypes = ["TRBD", "COLH"];
     const isHarvesting = harvestTypes.includes(pairedEquipment.categoria) && harvestTypes.includes(point.categoria);
-
+  
+    const transbordToPlanter = (point.categoria === "TRBD" && pairedEquipment.categoria === "PLAN");
+    const fillingLoad = (point.categoria === "PLAN" && pairedEquipment.categoria === "TRBD");
+    const convoyRefueling = (point.categoria === "COMB" || pairedEquipment.categoria === "COMB");
+  
     if (isHarvesting) {
       status = EquipmentStatusEnum.HARVESTING;
+    } else if (transbordToPlanter) {
+      status = EquipmentStatusEnum.TRANSBORDING_TO_PLANTER;
+    } else if (fillingLoad) {
+      status = EquipmentStatusEnum.FILLING_LOAD;
+    } else if (convoyRefueling) {
+      status = point.categoria === "COMB" ? EquipmentStatusEnum.REFUELING : EquipmentStatusEnum.BEING_REFUELED;
     }
-
+  
     return { status, paired: pairedEquipment.frota };
   }
+  
 
   /**
    * Atualiza o status do equipamento com base no ponto de dados anterior e verifica se o status anterior começa com a string fornecida e se a distância entre os pontos está dentro do limite máximo.
@@ -185,7 +197,7 @@ class StatusService {
       const startIndex = blockIndex * blockSize;
       const endIndex = Math.min(startIndex + blockSize, totalEquipment);
 
-      const worker = new Worker(path.resolve(__dirname, '../workers/StatusWorker.js'), {
+      const worker = new Worker(this.STATUS_WORKER_PATH, {
         workerData: {
           equipmentData,
           flattenEquipmentData,
