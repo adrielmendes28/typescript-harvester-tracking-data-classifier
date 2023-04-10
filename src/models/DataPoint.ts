@@ -1,10 +1,13 @@
+import { EquipmentStatusEnum } from "./EquipmentStatus";
+
 export interface DataPoint {
     id: string; // Um identificador único para cada objeto.
     deveui: string; // Identificador único do dispositivo associado ao equipamento.
     frota: string; // Número da frota a que o equipamento pertence.
     op: string; // Código da operação.
     stid: string; // Identificador único do equipamento.
-    status: string; // Status do equipamento.
+    status: EquipmentStatusEnum; // Status do equipamento.
+    paired: string | null; // Status do equipamento.
     categoria: string; // Categoria do equipamento (exemplo: COLH para colheitadeira, PLAN para plantadeira, TRBD para trator).
     operacao: string; // Operação na qual o equipamento está envolvido (neste caso, "PLANTIO CANA").
     Frente: string; // Frente de trabalho à qual o equipamento está associado.

@@ -38,9 +38,9 @@ class ManeuveringService {
             case 'TRBD':
                 return 45;
             case 'COLH':
-                return 30;
+                return 45;
             case 'PLAN':
-                return 35;
+                return 45;
             default:
                 return 40;
         }

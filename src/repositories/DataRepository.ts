@@ -4,13 +4,13 @@ import data from '../../static/data.json';
 import fs from 'fs';
 
 class DataRepository {
-  private readonly DATA_FILE_PATH = 'output/data.json';
+  private readonly OUTPUT_DIR = 'output';
 
   /**
    * Divide os dados em grupos por equipamento usando o campo 'frota' como identificador.
    * @returns {DataPoint[][]} Retorna um objeto EquipmentData com os dados divididos por equipamento.
    */
-   public getGroupedDataByEquipment(): any[][] {
+  public getGroupedDataByEquipment(): any[][] {
     const equipmentData: EquipmentData = {};
 
     for (const item of (data as any[])) {
@@ -29,7 +29,6 @@ class DataRepository {
 
     return groupedDataPoint;
   }
-
 
   /**
    * Divide os dados em grupos por equipamento usando o campo 'frota' como identificador.
@@ -50,6 +49,10 @@ class DataRepository {
     return equipmentData;
   }
 
+  /**
+   * Retorna os dados do equipamento achatados em um único array de pontos de dados.
+   * @returns {DataPoint[]} Retorna um array de pontos de dados achatados de todos os equipamentos.
+   */
   public flattenEquipmentData(): DataPoint[] {
     return data;
   }
@@ -79,7 +82,26 @@ class DataRepository {
    */
   public writeDataToFile(data: any) {
     const jsonData = JSON.stringify(data, null, 2);
-    fs.writeFileSync(this.DATA_FILE_PATH, jsonData);
+    fs.writeFileSync(this.OUTPUT_DIR+'/data.json', jsonData);
+  }
+
+
+  /**
+   * Escreve os dados em um arquivo no formato CSV a partir de um array de objetos JSON.
+   * @param {Array<Object>} data Array de objetos JSON a serem escritos no arquivo CSV.
+   */
+  public writeDataToCsv(data: DataPoint[]) {
+    // Converte o array de objetos JSON em um array de arrays
+    const csvData = data.map((obj) => Object.values(obj));
+
+    // Extrai os nomes das chaves do primeiro objeto como cabeçalho do CSV
+    const header = Object.keys(data[0]).join(',');
+
+    // Converte o array de arrays em uma string CSV
+    const csvString = csvData.map((row) => row.join(',')).join('\n');
+
+    // Escreve a string CSV no arquivo, incluindo o cabeçalho
+    fs.writeFileSync(this.OUTPUT_DIR+'/data.csv', `${header}\n${csvString}`);
   }
 }
 

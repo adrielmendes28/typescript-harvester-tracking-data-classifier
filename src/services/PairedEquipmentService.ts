@@ -3,11 +3,10 @@ import { EquipmentData } from "../models/EquipmentData";
 
 import { getDistance, findNearest } from 'geolib';
 
-const ANGLE_THRESHOLD = 15; // Limite de variação de ângulo em graus para considerar equipamentos pareados
-const SPEED_THRESHOLD = 4;  // Limite de variação de velocidade para considerar equipamentos pareados
-const DISTANCE_THRESHOLD = 20; // Limite de distância entre os equipamentos para considerar equipamentos pareados
-
 class PairedEquipmentService {
+    private readonly ANGLE_THRESHOLD = 20; // Limite de variação de ângulo em graus para considerar equipamentos pareados
+    private readonly SPEED_THRESHOLD = 4;  // Limite de variação de velocidade para considerar equipamentos pareados
+    private readonly DISTANCE_THRESHOLD = 30; // Limite de distância entre os equipamentos para considerar equipamentos pareados
     /**
      * Encontra o equipamento pareado com base no ID do equipamento, timestamp e dados de todos os equipamentos.
      *
@@ -81,9 +80,9 @@ class PairedEquipmentService {
         const speedDifference = Math.abs(equipment1Point.speed - equipment2Point.speed);
 
         return (
-            angleDifference <= ANGLE_THRESHOLD &&
-            speedDifference <= SPEED_THRESHOLD &&
-            distance <= DISTANCE_THRESHOLD
+            angleDifference <= this.ANGLE_THRESHOLD &&
+            speedDifference <= this.SPEED_THRESHOLD &&
+            distance <= this.DISTANCE_THRESHOLD
         );
     }
 

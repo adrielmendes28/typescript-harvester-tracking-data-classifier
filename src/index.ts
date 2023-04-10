@@ -7,18 +7,25 @@ async function start() {
     var flattenEquipmentData = DataRepository.flattenEquipmentData();
     console.log(Object.keys(equipmentData));
 
-    const blockSize = 5; // Ajuste o tamanho do bloco conforme necessário
+    const blockSize = 2; // Ajuste o tamanho do bloco conforme necessário
     const equipmentStatusBlocks = await StatusService.analyzeStatusByBlocks(equipmentData, flattenEquipmentData, blockSize);
 
     console.log(equipmentStatusBlocks);
     DataRepository.writeDataToFile(DataRepository.convertEquipmentDataToJSON(equipmentStatusBlocks));
 }
-// start();
+start();
 
 
-async function writeGrouped(){
+async function writeGrouped() {
     console.log('Obtendo dados...')
-    var flattenEquipmentData = DataRepository.getGroupedDataByEquipment();
-    DataRepository.writeDataToFile(flattenEquipmentData);
+    var groupedDataByEquipment = DataRepository.getGroupedDataByEquipment();
+    DataRepository.writeDataToFile(groupedDataByEquipment);
 }
-writeGrouped()
+// writeGrouped()
+
+async function writeSheet() {
+    console.log('Obtendo dados...')
+    var flattenEquipmentData = DataRepository.flattenEquipmentData();
+    DataRepository.writeDataToCsv(flattenEquipmentData);
+}
+// writeSheet()
