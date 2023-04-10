@@ -2,25 +2,27 @@ import { DataPoint } from "../models/DataPoint";
 import { EquipmentData } from "../models/EquipmentData";
 
 import { getDistance, findNearest } from 'geolib';
+import { FlattenEquipmentData } from "../models/FlattenEquipmentData";
 
 class PairedEquipmentService {
     private readonly ANGLE_THRESHOLD = 20; // Limite de variação de ângulo em graus para considerar equipamentos pareados
     private readonly SPEED_THRESHOLD = 4;  // Limite de variação de velocidade para considerar equipamentos pareados
     private readonly DISTANCE_THRESHOLD = 30; // Limite de distância entre os equipamentos para considerar equipamentos pareados
+
     /**
      * Encontra o equipamento pareado com base no ID do equipamento, timestamp e dados de todos os equipamentos.
      *
      * @param {string} equipmentId - ID do equipamento.
      * @param {number} timestamp - Timestamp em que o pareamento deve ser verificado.
      * @param {EquipmentData} allEquipmentData - Dados de todos os equipamentos.
-     * @param {DataPoint[]} flattenEquipmentData - Lista de pontos de dados de todos os equipamentos em um único array.
+     * @param {FlattenEquipmentData} flattenEquipmentData - Lista de pontos de dados de todos os equipamentos em um único array.
      * @return {Promise<DataPoint | null>} Retorna o DataPoint do equipamento pareado, caso encontrado, ou null.
      */
     public async findPairedEquipment(
         equipmentId: string,
         timestamp: number,
         allEquipmentData: EquipmentData,
-        flattenEquipmentData: DataPoint[]
+        flattenEquipmentData: FlattenEquipmentData
     ): Promise<DataPoint | null> {
         const equipment1Point = this.getLastDataPointForTimestamp(allEquipmentData[equipmentId], timestamp);
         if (!equipment1Point) return null;
@@ -47,20 +49,21 @@ class PairedEquipmentService {
     /**
      * Obtém os pontos de dados de outros equipamentos com o mesmo timestamp e categoria diferente.
      *
-     * @param {DataPoint[]} flattenEquipmentData - Lista de pontos de dados de todos os equipamentos em um único array.
+     * @param {FlattenEquipmentData} flattenEquipmentData - Lista de pontos de dados de todos os equipamentos em um único array.
      * @param {DataPoint} equipment1Point - Ponto de dados do equipamento de referência.
      * @param {number} timestamp - Timestamp para filtrar os pontos de dados.
      * @return {DataPoint[]} Retorna um array de pontos de dados de outros equipamentos no mesmo timestamp e categoria diferente.
      */
-    private getOtherEquipmentDataForTimestamp(
-        flattenEquipmentData: DataPoint[],
+     private getOtherEquipmentDataForTimestamp(
+        flattenEquipmentData: FlattenEquipmentData,
         equipment1Point: DataPoint,
         timestamp: number
     ): DataPoint[] {
-        return flattenEquipmentData.filter(
-            (point) =>
-                point.tst === timestamp &&
-                point.categoria !== equipment1Point.categoria
+        const dataAtTimestamp = flattenEquipmentData[timestamp];
+        if (!dataAtTimestamp) return [];
+    
+        return Object.values(dataAtTimestamp).filter(
+            (point) => point.categoria !== equipment1Point.categoria
         );
     }
 

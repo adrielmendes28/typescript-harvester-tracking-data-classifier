@@ -25,7 +25,7 @@ async function writeGrouped() {
 
 async function writeSheet() {
     console.log('Obtendo dados...')
-    var flattenEquipmentData = DataRepository.flattenEquipmentData();
+    var flattenEquipmentData = DataRepository.pureData();
     DataRepository.writeDataToCsv(flattenEquipmentData);
 }
 // writeSheet()

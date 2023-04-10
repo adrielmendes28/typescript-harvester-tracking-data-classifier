@@ -1,6 +1,7 @@
 import { getDistance } from 'geolib';
 import { EquipmentData } from "../models/EquipmentData";
 import { EquipmentStatus, EquipmentStatusEnum } from "../models/EquipmentStatus";
+import { FlattenEquipmentData } from '../models/FlattenEquipmentData';
 import { DataPoint } from "../models/DataPoint";
 
 import MotionService from "./MotionService"
@@ -22,7 +23,7 @@ class StatusService {
    * @returns {Promise<EquipmentStatus>} Retorna um objeto EquipmentStatus com o ID do equipamento e o status atual.
    */
 
-  public async analyzeStatusByPoint(point: DataPoint, allEquipmentData: EquipmentData, flattenEquipmentData: DataPoint[]): Promise<EquipmentStatus> {
+  public async analyzeStatusByPoint(point: DataPoint, allEquipmentData: EquipmentData, flattenEquipmentData: FlattenEquipmentData): Promise<EquipmentStatus> {
     const equipmentId = point.frota.toString();
     const nearOffsetPoints = EquipmentDataService.getNearOffsetPoints(point, allEquipmentData[equipmentId], this.NEAR_OFFSET);
 
@@ -56,7 +57,7 @@ class StatusService {
     * @param {EquipmentStatusEnum} status O status atual do equipamento.
     * @returns {Promise<EquipmentStatus>} Retorna uma promessa que resolve com o status atualizado do equipamento, incluindo informações sobre o equipamento pareado.
     */
-  private async getPairedStatus(point: DataPoint, allEquipmentData: EquipmentData, flattenEquipmentData: DataPoint[], equipmentId: string, status: EquipmentStatusEnum): Promise<EquipmentStatus> {
+  private async getPairedStatus(point: DataPoint, allEquipmentData: EquipmentData, flattenEquipmentData: FlattenEquipmentData, equipmentId: string, status: EquipmentStatusEnum): Promise<EquipmentStatus> {
     const pairedEquipment = await PairedEquipmentService.findPairedEquipment(equipmentId, point.tst, allEquipmentData, flattenEquipmentData);
     let paired = null;
     if (pairedEquipment) {
@@ -88,7 +89,7 @@ class StatusService {
     * @param {string} equipmentId O ID do equipamento.
     * @returns {Promise<EquipmentStatus>} Retorna uma promessa que resolve com o status atualizado do equipamento.
     */
-  private async getUpdatedStatus(point: DataPoint, nearOffsetPoints: DataPoint[], allEquipmentData: EquipmentData, flattenEquipmentData: DataPoint[], status: EquipmentStatusEnum, equipmentId: string): Promise<EquipmentStatus> {
+  private async getUpdatedStatus(point: DataPoint, nearOffsetPoints: DataPoint[], allEquipmentData: EquipmentData, flattenEquipmentData: FlattenEquipmentData, status: EquipmentStatusEnum, equipmentId: string): Promise<EquipmentStatus> {
     const isManeuvering = ManeuveringService.isManeuvering(nearOffsetPoints);
     let paired = null;
     if (isManeuvering) {
@@ -112,7 +113,7 @@ class StatusService {
    * @param {string} status O status atual do equipamento.
    * @returns {Promise<EquipmentStatus>} Retorna uma promessa que resolve com o status de colheita atualizado do equipamento.
    */
-  private async getHarvestingStatus(point: DataPoint, allEquipmentData: EquipmentData, flattenEquipmentData: DataPoint[], equipmentId: string, status: EquipmentStatusEnum): Promise<EquipmentStatus> {
+  private async getHarvestingStatus(point: DataPoint, allEquipmentData: EquipmentData, flattenEquipmentData: FlattenEquipmentData, equipmentId: string, status: EquipmentStatusEnum): Promise<EquipmentStatus> {
     const response = await this.getPairedStatus(point, allEquipmentData, flattenEquipmentData, equipmentId, status);
     if (response.paired) {
       return response;
@@ -186,7 +187,7 @@ class StatusService {
    * @param {number} blockSize O tamanho dos blocos para analisar o status dos equipamentos.
    * @returns {Promise<EquipmentData>} Retorna um array de blocos de EquipmentStatus.
    */
-  public async analyzeStatusByBlocks(equipmentData: EquipmentData, flattenEquipmentData: DataPoint[], blockSize: number): Promise<EquipmentData> {
+  public async analyzeStatusByBlocks(equipmentData: EquipmentData, flattenEquipmentData: FlattenEquipmentData, blockSize: number): Promise<EquipmentData> {
     const equipmentIds = Object.keys(equipmentData);
     const totalEquipment = equipmentIds.length;
     const blocks = Math.ceil(totalEquipment / blockSize);

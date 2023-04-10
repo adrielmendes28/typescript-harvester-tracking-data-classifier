@@ -2,6 +2,7 @@ import { DataPoint } from '../models/DataPoint';
 import { EquipmentData } from '../models/EquipmentData';
 import data from '../../static/data.json';
 import fs from 'fs';
+import { FlattenEquipmentData } from '../models/FlattenEquipmentData';
 
 class DataRepository {
   private readonly OUTPUT_DIR = 'output';
@@ -50,10 +51,31 @@ class DataRepository {
   }
 
   /**
+   * Retorna os dados do equipamento achatados em um objeto, com timestamps como chaves.
+   * @returns {FlattenEquipmentData} Retorna um objeto de pontos de dados achatados de todos os equipamentos.
+   */
+  public flattenEquipmentData(): FlattenEquipmentData {
+    const flattenedData: FlattenEquipmentData = {};
+
+    data.forEach((dataPoint: DataPoint) => {
+      const timestamp = dataPoint.tst;
+      const equipmentId = dataPoint.id;
+
+      if (!flattenedData[timestamp]) {
+        flattenedData[timestamp] = {};
+      }
+
+      flattenedData[timestamp][equipmentId] = dataPoint;
+    });
+
+    return flattenedData;
+  }
+
+  /**
    * Retorna os dados do equipamento achatados em um único array de pontos de dados.
    * @returns {DataPoint[]} Retorna um array de pontos de dados achatados de todos os equipamentos.
    */
-  public flattenEquipmentData(): DataPoint[] {
+   public pureData(): DataPoint[] {
     return data;
   }
 
@@ -82,7 +104,7 @@ class DataRepository {
    */
   public writeDataToFile(data: any) {
     const jsonData = JSON.stringify(data, null, 2);
-    fs.writeFileSync(this.OUTPUT_DIR+'/data.json', jsonData);
+    fs.writeFileSync(this.OUTPUT_DIR + '/data.json', jsonData);
   }
 
 
@@ -101,7 +123,7 @@ class DataRepository {
     const csvString = csvData.map((row) => row.join(',')).join('\n');
 
     // Escreve a string CSV no arquivo, incluindo o cabeçalho
-    fs.writeFileSync(this.OUTPUT_DIR+'/data.csv', `${header}\n${csvString}`);
+    fs.writeFileSync(this.OUTPUT_DIR + '/data.csv', `${header}\n${csvString}`);
   }
 }
 
