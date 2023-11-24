@@ -5,7 +5,7 @@ import DataSimulatorService from "../services/DataSimulatorService"
 const AppDataSource = new DataSource({
     type: "mssql",
     host: "localhost",
-    port: 1443,
+    port: 1433,
     username: "sa",
     password: "jK3!qY8@rW2#",
     database: "canalog",
